@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  sql-db:
+    image: mysql:8.0
+    container_name: sql_db
+    environment:
+      MYSQL_ROOT_PASSWORD: example_password
+      MYSQL_DATABASE: example_db
+      MYSQL_USER: example_user
+      MYSQL_PASSWORD: example_password
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./sql_data:/var/lib/mysql
+
+  nosql-db:
+    image: mongo:latest
+    container_name: nosql_db
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./mongo_data:/data/db
+
+  in-memory-db:
+    image: redis:latest
+    container_name: redis_cache
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis_data:/data
+
+  python-db-loader:
+    build: ./python-db-loader
+    container_name: python_db_loader
+
+  wordpress-editor:
+    build: ./wordpress-editor
+    container_name: wordpress_editor
