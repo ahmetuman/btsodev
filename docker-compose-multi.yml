@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.9'
 
 services:
   sql-db:
@@ -13,6 +13,8 @@ services:
       - "3307:3306"
     volumes:
       - ./sql_data:/var/lib/mysql
+    networks:
+      - ozel-ag
 
   nosql-db:
     image: mongo:latest
@@ -21,6 +23,8 @@ services:
       - "27017:27017"
     volumes:
       - ./mongo_data:/data/db
+    networks:
+      - ozel-ag
 
   in-memory-db:
     image: redis:latest
@@ -29,11 +33,21 @@ services:
       - "6379:6379"
     volumes:
       - ./redis_data:/data
+    networks:
+      - ozel-ag
 
   python-db-loader:
     build: ./python-db-loader
     container_name: python_db_loader
+    networks:
+      - ozel-ag
 
   wordpress-editor:
     build: ./wordpress-editor
     container_name: wordpress_editor
+    networks:
+      - ozel-ag
+
+networks:
+  ozel-ag:
+    external: true
